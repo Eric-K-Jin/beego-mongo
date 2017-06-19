@@ -17,7 +17,7 @@ var (
 )
 
 //连接db生成session会话
-func ConnectDb() *mgo.Session {
+func (this *MongoDB) ConnectDb() *mgo.Session {
 	lock.Lock()
 	defer lock.Unlock()
 	var err error
@@ -33,7 +33,7 @@ func ConnectDb() *mgo.Session {
 
 //获取集合资源
 func (this *MongoDB) SetCollection(collectionName string) {
-	dbSession := ConnectDb()
+	dbSession := this.ConnectDb()
 	this.collection = dbSession.DB(database).C(collectionName)
 }
 
