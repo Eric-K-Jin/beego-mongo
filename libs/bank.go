@@ -2,7 +2,6 @@ package libs
 
 import (
 	"bank/libs/mongodb"
-	"gopkg.in/mgo.v2-unstable"
 )
 
 type Bank struct {
@@ -27,9 +26,19 @@ func (this *Bank) Find(where map[string]interface{}) []BankInfo {
 	return result
 }
 
-func (this *Bank) FindAll(where map[string]interface{}) *mgo.Iter{
+func (this *Bank) FindAll(where map[string]interface{}) map[string]interface{}{
 	iter := this.mongoDb.FindAllData(where)
-	return iter
+	row := BankInfo{}
+	result := make(map[string]interface{})
+	for iter.Next(row) {
+		result = map[string]interface{}{
+			"id": row.Id,
+			"name": row.Name,
+			"data": row.Data,
+			"time": row.Time,
+		}
+	}
+	return result
 }
 
 func (this *Bank) GetCount() int {
